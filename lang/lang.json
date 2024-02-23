@@ -1,0 +1,61 @@
+{
+    "items": [
+        {
+            "id": "title",
+            "en": "Person Listing",
+            "es": "Listado de Personas"
+        },
+        {
+            "id": "no-hay-personas",
+            "en": "List empty: there are no people.",
+            "es": "Lista vacía: no hay personas."
+        },
+        {
+            "id": "btn-limpiar",
+            "en": "Wipe list",
+            "es": "Limpiar lista"
+        },
+        {
+            "id": "label-nombre",
+            "en": "First name",
+            "es": "Nombre"
+        },
+        {
+            "id": "label-apellido",
+            "en": "Last name",
+            "es": "Apellido"
+        },
+        {
+            "id": "acerca-de-span",
+            "en": "About...",
+            "es": "Acerca de..."
+        },
+        {
+            "id": "acerca-de-modal-toggle",
+            "data-bs-target": {
+                "en": "#about-modal",
+                "es": "#acerca-de-modal"
+            }
+        },
+        {
+            "id": "selector-idioma",
+            "en": "Language 🇬🇧",
+            "es": "Idioma 🇪🇸"
+        },
+        {
+            "id": "language-dropdown-menu",
+            "items": [
+                {
+                    "locale": "en",
+                    "en": "English 🇬🇧",
+                    "es": "Inglés 🇬🇧"
+                },
+                {
+                    "locale": "es",
+                    "en": "Spanish 🇪🇸",
+                    "es": "Español 🇪🇸"
+                }
+            ]
+        }
+    ]
+}

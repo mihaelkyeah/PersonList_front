@@ -64,3 +64,22 @@ button span.emoji {
     margin: 0;
     padding: 0;
 }
+.lang-picker-button {
+    background: white !important;
+    color: var(--bs-black) !important;
+}
+.lang-picker-button:focus {
+    color: var(--bs-black) !important;
+}
+.lang-picker-button:hover {
+    background: var(--bs-red) !important;
+    color: white !important;
+}
+#language-dropdown-menu li:hover {
+    background: lightgray !important;
+    color: white !important;
+}
+#language-dropdown-menu li a:hover {
+    background: var(--bs-red) !important;
+    color: white !important;
+}

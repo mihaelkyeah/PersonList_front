@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let rotuloEditarNombre = document.createElement("label");
             rotuloEditarNombre.for = "editarNombre";
             rotuloEditarNombre.classList.add("label-form-persona-chiquito");
-            rotuloEditarNombre.innerHTML = "<small>Nombre</small>";
+            rotuloEditarNombre.innerHTML = `<small>${palabraNombre}</small>`;
 
             let campoEditarNombre = document.createElement("input");
             campoEditarNombre.type = "text";
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let rotuloEditarApellido = document.createElement("label");
             rotuloEditarApellido.for = "editarApellido";
             rotuloEditarApellido.classList.add("label-form-persona-chiquito");
-            rotuloEditarApellido.innerHTML = "<small>Apellido</small>";
+            rotuloEditarApellido.innerHTML = `<small>${palabraApellido}</small>`;
 
             let campoEditarApellido = document.createElement("input");
             campoEditarApellido.type = "text";

@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
+
+:root {
+    --primario: #3c55bd;
+}
+
+@font-face {
+    font-family: "EmojiOneColor";
+    font-weight: normal;
+    src: url("../fonts/EmojiOneColor.otf");
+}
+
+body {
+    /* font-family:'Times New Roman', Times, serif !important; */
+    font-family: sans-serif !important;
+    font-smooth: none;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: none;
+    background-image: url(../img/large-triangles-turquoise.svg);
+}
+button span.emoji {
+    font-family: "EmojiOneColor", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Awesome", "Apple Color Emoji" !important;
+}
+
+
+.bg-primario, .btn-primario {
+    background: var(--primario) !important;
+    color: white !important;
+}
+.btn-redondo {
+    border-radius: 50% !important;
+    padding: 0 !important;
+    height: var(--tamanio) !important;
+    width: var(--tamanio) !important;
+    text-align: center !important;
+}
+.label-form-persona, .label-form-persona-chiquito {
+    color: gray;
+}
+.label-form-persona, .label-form-persona-chiquito, .input-form-persona {
+    font-family: sans-serif;
+}
+.label-form-persona-chiquito {
+    font-size: 8pt;
+}
+.input-form-persona {
+    border: none;
+    border-bottom: 3px ridge #ffffff00;
+    border-radius: 1ch;
+    padding: 0ch 0.5ch;
+    outline: none !important;
+}
+.input-form-persona:hover {
+    border-bottom: 3px inset var(--primario) !important;
+}
+.input-form-persona:active, .input-form-persona:focus {
+    border-bottom: 3px outset var(--primario) !important;
+}
+.item-lista-personas {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}

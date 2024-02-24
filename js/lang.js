@@ -2,6 +2,7 @@
 
 let palabraNombre = "";
 let palabraApellido = "";
+let alMenosNombreApellido = "";
 
 document.addEventListener("DOMContentLoaded", updateContentLanguage);
 
@@ -17,10 +18,12 @@ async function updateContentLanguage() {
         case "es":
             palabraNombre = "Nombre";
             palabraApellido = "Apellido";
+            alMenosNombreApellido = "Ingrese al menos un nombre o un apellido.";
             break;
         default:
             palabraNombre = "First name";
             palabraApellido = "Last name";
+            alMenosNombreApellido = "Enter at least one first or last name."
             break;
     }
     placeText(langJSON, lang);

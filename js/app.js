@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
             personas.push(persona);
             actualizarListaPersonas();
         } else {
-            alert("Ingrese al menos un nombre o un apellido.");
+            alert(alMenosNombreApellido);
         }
     }
 

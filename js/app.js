@@ -1,61 +1,52 @@
+// Strict mode enabled
 "use strict";
 
-let personas = [];
+// Define memory structure to keep stuff in until page refreshes
+let persons = [];
 
-class Persona {
-    static contadorPersonas = 0;
-    constructor(nombre, apellido) {
-        this._idPersona = ++Persona.contadorPersonas;
-        this._nombre = nombre;
-        this._apellido = apellido;
-    }
-    get idPersona() {
-        return this._idPersona;
-    }
-    get nombre() {
-        return this._nombre;
-    }
-    set nombre(nombre) {
-        this._nombre = nombre;
-    }
-    get apellido() {
-        return this._apellido;
-    }
-    set apellido(apellido) {
-        this._apellido = apellido;
-    }
-}
-
+// Wait for the document to load to define and trigger all this stuff
 document.addEventListener("DOMContentLoaded", () => {
-    let formulario = document.forms["formulario"];
-    actualizarListaPersonas();
+    // Get form
+    let personForm = document.forms["personForm"];
 
-    document.querySelector("#btn-agregar").addEventListener("click", agregarPersona);
-    document.querySelector("#btn-limpiar").addEventListener("click", limpiarLista);
+    // Add event listeners
+    document.querySelector("#btn-add").addEventListener("click", addPerson);
+    document.querySelector("#btn-wipe").addEventListener("click", wipeList);
 
-    function agregarPersona() {
-        if(!formulario["nombre"].value == "" || !formulario["apellido"].value == "") {
-            let persona = new Persona(formulario["nombre"].value, formulario["apellido"].value);
-            personas.push(persona);
-            actualizarListaPersonas();
+    // Add person to person array if both name and surname are provided
+    function addPerson() {
+        if(!personForm["name"].value == "" && !personForm["surname"].value == "") {
+            // Add person to person array and refresh list
+            persons.push(new Person(personForm["name"].value, personForm["surname"].value));
+            refreshPersonList();
         } else {
-            alert(alMenosNombreApellido);
+            // Prompt the user to fill both required fields and not refresh list
+            document.querySelector("#form-prompt-modal-button").click();
+            document.querySelector("#form-prompt-ul").innerHTML = "";
+            if(personForm["name"].value == "")
+                document.querySelector("#form-prompt-ul").innerHTML += `<li>${nameWord}</li>`;
+            if(personForm["surname"].value == "")
+                document.querySelector("#form-prompt-ul").innerHTML += `<li>${surnameWord}</li>`;
         }
     }
 
-    function editarPersona(event) {
-        let idPersonaEditar = parseInt(event.target.getAttribute("data-id-persona"));
-        let persona = undefined;
+    // Place form to edit person in lieu of person row, and save or cancel changes
+    function editPerson(event) {
+        // Search for person
+        let editPersonId = parseInt(event.target.getAttribute("data-person-id"));
         let i = 0;
-        let encontrada = undefined;
-        let items = document.querySelector("#lista-personas").getElementsByTagName("li");
-        while(encontrada === undefined & i < personas.length) {
-            if(parseInt(items[i].getAttribute("data-id-persona")) === idPersonaEditar) {
-                encontrada = items[i];
+        let found = undefined;
+        let items = document.querySelector("#person-list").getElementsByTagName("li");
+        let person = undefined;
+        // Search for item in list with the same id as the one in the edit button
+        while(found === undefined & i < persons.length) {
+            if(parseInt(items[i].getAttribute("data-person-id")) === editPersonId) {
+                found = items[i];
+                // Retrieve existing person's details from person array in memory
                 let j = 0;
-                while(persona === undefined && j < personas.length) {
-                    if(parseInt(personas[j].idPersona) === idPersonaEditar)
-                        persona = personas[j];
+                while(person === undefined && j < persons.length) {
+                    if(parseInt(persons[j].idPerson) === editPersonId)
+                        person = persons[j];
                     else
                         j++;
                 }
@@ -63,167 +54,185 @@ document.addEventListener("DOMContentLoaded", () => {
             else
                 i++;
         }
-        if(encontrada !== undefined) {
-            encontrada.innerHTML = "";
+        // I suppose checking again for person !== undefined is a bit overkill,
+        // but it's best to be 100% sure. :P It still works!
+        if(found !== undefined && person !== undefined) {
+            // Clear the found list item's inner HTML
+            found.innerHTML = "";
 
-            encontrada.classList.add("my-0");
-            encontrada.classList.add("py-0");
-            let spanNombre = document.createElement("span");
+            // These were set so that the viewing/editing view didn't change too much,
+            // but it changes anyway, so I'm leaving them out now.
+            // found.classList.add("my-0");
+            // found.classList.add("py-0");
+            
+            let nameSpan = document.createElement("span");
 
-            let rotuloEditarNombre = document.createElement("label");
-            rotuloEditarNombre.for = "editarNombre";
-            rotuloEditarNombre.classList.add("label-form-persona-chiquito");
-            rotuloEditarNombre.innerHTML = `<small>${palabraNombre}</small>`;
+            let editNameLabel = document.createElement("label");
+                editNameLabel.for = "editName";
+                editNameLabel.classList.add("label-person-form-small");
+                editNameLabel.innerHTML = `<small>${nameWord}</small>`;
 
-            let campoEditarNombre = document.createElement("input");
-            campoEditarNombre.type = "text";
-            campoEditarNombre.name = "editarNombre";
-            campoEditarNombre.id = "editarNombre";
-            campoEditarNombre.classList.add("input-form-persona");
-            campoEditarNombre.classList.add("w-100");
-            campoEditarNombre.value = persona.nombre;
+            let editNameField = document.createElement("input");
+                editNameField.type = "text";
+                editNameField.name = "editName";
+                editNameField.id = "editName";
+                editNameField.classList.add("input-person-form");
+                editNameField.classList.add("w-100");
+                editNameField.value = person.name;
 
-            spanNombre.appendChild(rotuloEditarNombre);
-            spanNombre.appendChild(campoEditarNombre);
-            spanNombre.classList.add("col-4");
-            spanNombre.classList.add("p-1");
-            spanNombre.classList.add("m-0");
+            nameSpan.appendChild(editNameLabel);
+            nameSpan.appendChild(editNameField);
+            nameSpan.classList.add("col-6");
+            nameSpan.classList.add("p-1");
+            nameSpan.classList.add("m-0");
 
-            let spanApellido = document.createElement("span");
+            let surnameSpan = document.createElement("span");
 
-            let rotuloEditarApellido = document.createElement("label");
-            rotuloEditarApellido.for = "editarApellido";
-            rotuloEditarApellido.classList.add("label-form-persona-chiquito");
-            rotuloEditarApellido.innerHTML = `<small>${palabraApellido}</small>`;
+            let editSurnameLabel = document.createElement("label");
+                editSurnameLabel.for = "editSurname";
+                editSurnameLabel.classList.add("label-person-form-small");
+                editSurnameLabel.innerHTML = `<small>${surnameWord}</small>`;
 
-            let campoEditarApellido = document.createElement("input");
-            campoEditarApellido.type = "text";
-            campoEditarApellido.name = "editarApellido";
-            campoEditarApellido.id = "editarApellido";
-            campoEditarApellido.classList.add("input-form-persona");
-            campoEditarApellido.classList.add("w-100");
-            campoEditarApellido.value = persona.apellido;
+            let editSurnameField = document.createElement("input");
+                editSurnameField.type = "text";
+                editSurnameField.name = "editSurname";
+                editSurnameField.id = "editSurname";
+                editSurnameField.classList.add("input-person-form");
+                editSurnameField.classList.add("w-100");
+                editSurnameField.value = person.surname;
 
-            spanApellido.appendChild(rotuloEditarApellido);
-            spanApellido.appendChild(campoEditarApellido);
-            spanApellido.classList.add("col-4");
-            spanApellido.classList.add("p-1");
-            spanApellido.classList.add("m-0");
+            surnameSpan.appendChild(editSurnameLabel);
+            surnameSpan.appendChild(editSurnameField);
+            surnameSpan.classList.add("col-6");
+            surnameSpan.classList.add("p-1");
+            surnameSpan.classList.add("m-0");
 
-            let botonAplicar = document.createElement("button");
-            botonAplicar.type = "button";
-            botonAplicar.classList.add("btn");
-            botonAplicar.classList.add("btn-success");
-            botonAplicar.style.padding = "1ch";
-            botonAplicar.style.marginRight = "0.5ch";
-            botonAplicar.setAttribute("data-id-persona", idPersonaEditar);
-            botonAplicar.innerHTML = `<span class="emoji">✅</span>`;
+            let applyButton = document.createElement("button");
+                applyButton.type = "button";
+                applyButton.classList.add("btn");
+                applyButton.classList.add("btn-success");
+                applyButton.style.padding = "1ch";
+                applyButton.style.marginRight = "0.5ch";
+                applyButton.setAttribute("data-person-id", editPersonId);
+                applyButton.innerHTML = `<span class="emoji">✅</span>`;
 
-            let botonCancelar = document.createElement("button");
-            botonCancelar.type = "button";
-            botonCancelar.classList.add("btn");
-            botonCancelar.classList.add("btn-secondary");
-            botonCancelar.style.padding = "1ch";
-            botonCancelar.innerHTML = `<span class="emoji">✖</span>`;
+            let cancelButton = document.createElement("button");
+                cancelButton.type = "button";
+                cancelButton.classList.add("btn");
+                cancelButton.classList.add("btn-secondary");
+                cancelButton.style.padding = "1ch";
+                cancelButton.innerHTML = `<span class="emoji">✖</span>`;
 
-            botonAplicar.addEventListener("click", (event) => {
-                persona.nombre = document.querySelector("#editarNombre").value;
-                persona.apellido = document.querySelector("#editarApellido").value;
-                actualizarListaPersonas();
+            // Apply button edits the retrieved person's attributes and refreshes list
+            applyButton.addEventListener("click", (event) => {
+                person.name = document.querySelector("#editName").value;
+                person.surname = document.querySelector("#editSurname").value;
+                refreshPersonList();
             });
-            botonCancelar.addEventListener("click", () => {
-                actualizarListaPersonas();
+            // Cancel button returns the list back to normal (and dismisses the edit form)
+            cancelButton.addEventListener("click", () => {
+                refreshPersonList();
             });
 
             let rowSpan = document.createElement("span");
-            rowSpan.classList.add("item-lista-personas");
-            rowSpan.classList.add("fs-6");
+                rowSpan.classList.add("person-list-item");
+                rowSpan.classList.add("fs-6");
 
-            let spanFormulario = document.createElement("span");
-            spanFormulario.classList.add("flex-grow-1");
-            spanFormulario.classList.add("row");
-            spanFormulario.classList.add("m-0");
-            spanFormulario.classList.add("p-0");
-            spanNombre.classList.add("col-6");
-            spanApellido.classList.add("col-6");
-            spanFormulario.appendChild(spanNombre);
-            spanFormulario.appendChild(spanApellido);
+            let formSpan = document.createElement("span");
+                formSpan.classList.add("flex-grow-1");
+                formSpan.classList.add("row");
+                formSpan.classList.add("m-0");
+                formSpan.classList.add("p-0");
 
+            formSpan.appendChild(nameSpan);
+            formSpan.appendChild(surnameSpan);
 
-            rowSpan.appendChild(spanFormulario);
-            rowSpan.appendChild(botonAplicar);
-            rowSpan.appendChild(botonCancelar);
+            rowSpan.appendChild(formSpan);
+            rowSpan.appendChild(applyButton);
+            rowSpan.appendChild(cancelButton);
 
-            encontrada.appendChild(rowSpan);
+            found.appendChild(rowSpan);
         }
-        document.querySelector("#lista-personas").classList.remove("list-unstyled");
+        document.querySelector("#person-list").classList.remove("list-unstyled");
     }
 
-    function borrarPersona(event) {
-        let idPersonaBorrar = parseInt(event.target.getAttribute("data-id-persona"));
+    // Delete individual person
+    function deletePerson(event) {
+        let personDeleteId = parseInt(event.target.getAttribute("data-person-id"));
         let i = 0;
-        let encontrado = false;
-        while(!encontrado && i < personas.length) {
-            if(personas[i].idPersona === idPersonaBorrar)
-                encontrado = true;
+        let found = false;
+        // Search for person to delete by id
+        while(!found && i < persons.length) {
+            if(persons[i].idPerson === personDeleteId)
+                found = true;
             else
                 i++;
         }
-        if(encontrado)
-            personas.splice(i, 1);
+        if(found)
+            // Splice person array at index i, only skipping 1 item (2nd parameter)
+            persons.splice(i, 1);
 
-        actualizarListaPersonas();
+        // Refresh list with person array updated
+        refreshPersonList();
     }
 
-    function limpiarLista() {
-        personas = [];
-        actualizarListaPersonas();
+    // Delete all persons
+    function wipeList() {
+        // Empty persons array
+        persons = [];
+        // Refresh list with no people in the array
+        refreshPersonList();
     }
 
-    function actualizarListaPersonas() {
-        formulario["nombre"].value = "";
-        formulario["apellido"].value = "";
-        document.querySelector("#lista-personas").innerHTML = "";
-        if(personas.length < 1) {
-            // Mostrar mensaje de lista vacía
-            document.querySelector("#no-hay-personas").removeAttribute("hidden");
-            // Esconder botón de limpiar lista
-            document.querySelector("#div-btn-limpiar").setAttribute("hidden", true);
+    // Refresh person list in the HTML according to the person array
+    function refreshPersonList() {
+        // Reset form
+        personForm["name"].value = "";
+        personForm["surname"].value = "";
+        // Reset list (so as to avoid accumulating values)
+        document.querySelector("#person-list").innerHTML = "";
+        // If there are no people
+        if(persons.length < 1) {
+            // Show empty list message
+            document.querySelector("#no-persons").removeAttribute("hidden");
+            // Hide wipe list button
+            document.querySelector("#div-btn-wipe").setAttribute("hidden", true);
         }
+        // Else, if there is at least one person
         else {
-            // Ocultar mensaje de lista vacía
-            document.querySelector("#no-hay-personas").setAttribute("hidden", true);
-            // Mostrar botón de limpiar lista
-            document.querySelector("#div-btn-limpiar").removeAttribute("hidden");
+            // Hide empty list message
+            document.querySelector("#no-persons").setAttribute("hidden", true);
+            // Show wipe list button
+            document.querySelector("#div-btn-wipe").removeAttribute("hidden");
 
-            personas.forEach((persona) => {
+            persons.forEach((person) => {
                 let listItem = document.createElement("li");
-                listItem.setAttribute("data-id-persona", persona.idPersona);
+                    listItem.setAttribute("data-person-id", person.idPerson);
 
                 let rowSpan = document.createElement("span");
-                rowSpan.classList.add("item-lista-personas");
+                    rowSpan.classList.add("person-list-item");
 
                 let nameSpan = document.createElement("span");
-                nameSpan.innerHTML = `${persona.nombre} ${persona.apellido}`;
-                nameSpan.classList.add("flex-grow-1");
+                    nameSpan.innerHTML = `${person.name} ${person.surname}`;
+                    nameSpan.classList.add("flex-grow-1");
 
                 let editButton = document.createElement("button");
-                editButton.classList.add("btn");
-                editButton.classList.add("btn-warning");
-                editButton.style.marginRight = "0.5ch";
-                editButton.style.padding = "1ch";
-                editButton.innerHTML = `<span class="emoji">✍</span>`;
-                editButton.setAttribute("data-id-persona", persona.idPersona);
+                    editButton.classList.add("btn");
+                    editButton.classList.add("btn-warning");
+                    editButton.style.marginRight = "0.5ch";
+                    editButton.style.padding = "1ch";
+                    editButton.innerHTML = `<span class="emoji">✍</span>`;
+                    editButton.setAttribute("data-person-id", person.idPerson);
 
                 let deleteButton = document.createElement("button");
-                deleteButton.classList.add("btn");
-                deleteButton.classList.add("btn-danger");
-                deleteButton.style.padding = "1ch";
-                deleteButton.innerHTML = `<span class="emoji">🗑</span>`;
-                deleteButton.setAttribute("data-id-persona", persona.idPersona);
+                    deleteButton.classList.add("btn");
+                    deleteButton.classList.add("btn-danger");
+                    deleteButton.style.padding = "1ch";
+                    deleteButton.innerHTML = `<span class="emoji">🗑</span>`;
+                    deleteButton.setAttribute("data-person-id", person.idPerson);
 
-                editButton.addEventListener("click", editarPersona);
-                deleteButton.addEventListener("click", borrarPersona);
+                editButton.addEventListener("click", editPerson);
+                deleteButton.addEventListener("click", deletePerson);
 
                 rowSpan.appendChild(nameSpan);
                 rowSpan.appendChild(editButton);
@@ -231,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 listItem.appendChild(rowSpan);
                 listItem.classList.add("list-group-item");
-                document.querySelector("#lista-personas").appendChild(listItem);
+                document.querySelector("#person-list").appendChild(listItem);
             });
         }
     }

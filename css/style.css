@@ -34,29 +34,29 @@ button span.emoji {
     width: var(--tamanio) !important;
     text-align: center !important;
 }
-.label-form-persona, .label-form-persona-chiquito {
+.label-person-form, .label-person-form-small {
     color: gray;
 }
-.label-form-persona, .label-form-persona-chiquito, .input-form-persona {
+.label-person-form, .label-person-form-small, .input-person-form {
     font-family: sans-serif;
 }
-.label-form-persona-chiquito {
+.label-person-form-small {
     font-size: 8pt;
 }
-.input-form-persona {
+.input-person-form {
     border: none;
     border-bottom: 3px ridge #ffffff00;
     border-radius: 1ch;
     padding: 0ch 0.5ch;
     outline: none !important;
 }
-.input-form-persona:hover {
+.input-person-form:hover {
     border-bottom: 3px inset var(--primario) !important;
 }
-.input-form-persona:active, .input-form-persona:focus {
+.input-person-form:active, .input-person-form:focus {
     border-bottom: 3px outset var(--primario) !important;
 }
-.item-lista-personas {
+.person-list-item {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -82,4 +82,12 @@ button span.emoji {
 #language-dropdown-menu li a:hover {
     background: var(--bs-red) !important;
     color: white !important;
+}
+#form-prompt-modal-button {
+    opacity: 0% !important;
+    filter: opacity(0);
+    visibility: hidden !important;
+    width: 1px;
+    height: 1px;
+    position: absolute;
 }

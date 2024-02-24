@@ -6,39 +6,49 @@
             "es": "Listado de Personas"
         },
         {
-            "id": "no-hay-personas",
+            "id": "no-persons",
             "en": "List empty: there are no people.",
             "es": "Lista vacía: no hay personas."
         },
         {
-            "id": "btn-limpiar",
-            "en": "Wipe list",
-            "es": "Limpiar lista"
+            "id": "btn-wipe",
+            "en": "Wipe List",
+            "es": "Limpiar Lista"
         },
         {
-            "id": "label-nombre",
-            "en": "First name",
+            "id": "label-name",
+            "en": "Name",
             "es": "Nombre"
         },
         {
-            "id": "label-apellido",
-            "en": "Last name",
+            "id": "label-surname",
+            "en": "Surname",
             "es": "Apellido"
         },
         {
-            "id": "acerca-de-span",
+            "id": "form-prompt-modal-label",
+            "en": "Missing data",
+            "es": "Datos faltantes"
+        },
+        {
+            "id": "form-prompt-modal-message",
+            "en": "Fill the following required fields:",
+            "es": "Llene los siguientes campos obligatorios:"
+        },
+        {
+            "id": "about-span",
             "en": "About...",
             "es": "Acerca de..."
         },
         {
-            "id": "acerca-de-modal-toggle",
+            "id": "about-modal-toggle",
             "data-bs-target": {
                 "en": "#about-modal",
                 "es": "#acerca-de-modal"
             }
         },
         {
-            "id": "selector-idioma",
+            "id": "lang-picker",
             "en": "Language 🇬🇧",
             "es": "Idioma 🇪🇸"
         },
